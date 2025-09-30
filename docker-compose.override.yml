@@ -60,6 +60,8 @@ x-shared:
       - zammad-memcached
       - zammad-postgresql
       - zammad-redis
+    networks:
+      - npm_network
 
 services:
   zammad-backup:
@@ -68,7 +70,9 @@ services:
     volumes:
       - ${ZAMMAD-BACKUP}:/var/tmp/zammad
       - ${ZAMMAD-STORAGE}:/opt/zammad/storage:ro
-    user: 0:0
+    user: 0:0        
+    networks:
+      - npm_network
 
   zammad-elasticsearch:
     image: elasticsearch:${ELASTICSEARCH_VERSION:-8.19.4}
@@ -79,6 +83,8 @@ services:
       discovery.type: single-node
       xpack.security.enabled: 'false'
       ES_JAVA_OPTS: ${ELASTICSEARCH_JAVA_OPTS:--Xms1g -Xmx1g}
+    networks:
+      - npm_network
 
   zammad-init:
     <<: *zammad-service
@@ -87,11 +93,15 @@ services:
       - zammad-postgresql
     restart: on-failure
     user: 0:0
+    networks:
+      - npm_network
 
   zammad-memcached:
     command: memcached -m 256M
     image: memcached:${MEMCACHE_VERSION:-1.6.39-alpine}
     restart: ${RESTART:-always}
+    networks:
+      - npm_network
 
   zammad-nginx:
     <<: *zammad-service
@@ -102,6 +112,8 @@ services:
       - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
     depends_on:
       - zammad-railsserver
+    networks:
+      - npm_network
 
   zammad-postgresql:
     environment:
@@ -112,24 +124,34 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - ${POSTGRESQL-DATA}:/var/lib/postgresql/data
+    networks:
+      - npm_network
 
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
+    networks:
+      - npm_network
 
   zammad-redis:
     image: redis:${REDIS_VERSION:-7.4.5-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
+    networks:
+      - npm_network
 
   zammad-scheduler:
     <<: *zammad-service
     command: ["zammad-scheduler"]
+  networks:
+      - npm_network
 
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
+  networks:
+      - npm_network
 
 volumes:
   elasticsearch-data:
@@ -142,3 +164,7 @@ volumes:
     driver: local
   zammad-storage:
     driver: local
+
+networks:
+  npm_network:
+    external: true
