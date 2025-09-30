@@ -155,15 +155,15 @@ services:
 
 volumes:
   elasticsearch-data:
-    driver: local
+    external: true
   postgresql-data:
-    driver: local
+    external: true
   redis-data:
-    driver: local
+    external: true
   zammad-backup:
-    driver: local
+    external: true
   zammad-storage:
-    driver: local
+    external: true
 
 networks:
   npm_network:
