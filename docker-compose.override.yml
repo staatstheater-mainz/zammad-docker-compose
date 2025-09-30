@@ -155,11 +155,11 @@ services:
 
 volumes:
   elasticsearch-data:
-    drive: local
+    driver: local
   postgresql-data:
     external: true
   redis-data:
-    drive: local
+    driver: local
   zammad-backup:
     external: true
   zammad-storage:
