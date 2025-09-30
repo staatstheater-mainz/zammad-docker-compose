@@ -144,13 +144,13 @@ services:
   zammad-scheduler:
     <<: *zammad-service
     command: ["zammad-scheduler"]
-  networks:
+    networks:
       - npm_network
 
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
-  networks:
+    networks:
       - npm_network
 
 volumes:
