@@ -55,7 +55,7 @@ x-shared:
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.2}
     restart: ${RESTART:-always}
     volumes:
-      - ${ZAMMAD-STORAGE}:/opt/zammad/storage
+      - ${ZAMMAD_STORAGE}:/opt/zammad/storage
     depends_on:
       - zammad-memcached
       - zammad-postgresql
@@ -68,8 +68,8 @@ services:
     <<: *zammad-service
     command: ["zammad-backup"]
     volumes:
-      - ${ZAMMAD-BACKUP}:/var/tmp/zammad
-      - ${ZAMMAD-STORAGE}:/opt/zammad/storage:ro
+      - ${ZAMMAD_BACKUP}:/var/tmp/zammad
+      - ${ZAMMAD_STORAGE}:/opt/zammad/storage:ro
     user: 0:0        
     networks:
       - npm_network
@@ -123,7 +123,7 @@ services:
     image: postgres:${POSTGRES_VERSION:-17.6-alpine}
     restart: ${RESTART:-always}
     volumes:
-      - ${POSTGRESQL-DATA}:/var/lib/postgresql/data
+      - ${POSTGRESQL_DATA}:/var/lib/postgresql/data
     networks:
       - npm_network
 
